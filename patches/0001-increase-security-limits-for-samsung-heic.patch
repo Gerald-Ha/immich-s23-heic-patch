@@ -1,0 +1,22 @@
+diff --git a/libheif/security_limits.cc b/libheif/security_limits.cc
+index 11910c4..6cf81ad 100644
+--- a/libheif/security_limits.cc
++++ b/libheif/security_limits.cc
+@@ -34,7 +34,7 @@ heif_security_limits global_security_limits{
+     .max_image_size_pixels = 32768 * 32768,
+     .max_number_of_tiles = 4096 * 4096,
+     .max_bayer_pattern_pixels = 16 * 16,
+-    .max_items = 1000,
++    .max_items = 2048,
+ 
+     .max_color_profile_size = 100 * 1024 * 1024, // 100 MB
+     .max_memory_block_size = UINT64_C(4) * 1024 * 1024 * 1024,  // 4 GB
+@@ -43,7 +43,7 @@ heif_security_limits global_security_limits{
+     .max_iloc_extents_per_item = 32,
+     .max_size_entity_group = 64,
+ 
+-    .max_children_per_box = 100,
++    .max_children_per_box = 512,
+ 
+     // --- version 2
+ 

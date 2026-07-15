@@ -1,0 +1,22 @@
+FROM base-server-prod:local AS patched-base
+
+FROM ghcr.io/immich-app/immich-server:release
+
+# Replace libheif with patched version (hardcoded ipma bypass)
+COPY --from=patched-base /usr/local/lib/libheif* /usr/local/lib/
+COPY --from=patched-base /usr/local/lib/libde265* /usr/local/lib/
+
+# Replace libvips modules (ensure heif loader matches patched libheif)
+COPY --from=patched-base /usr/local/lib/vips-modules-* /usr/local/lib/
+
+RUN ldconfig /usr/local/lib
+
+ENV SHARP_FORCE_GLOBAL_LIBVIPS=true
+ENV LD_LIBRARY_PATH=/usr/local/lib
+
+# Verify heif support
+RUN node -e "try{const s=require('/usr/src/app/server/node_modules/sharp');console.log('sharp:',s.versions.sharp,'libvips:',s.versions.vips,'heif:',s.format.heif?'YES':'NO')}catch(e){console.error(e.message)}"
+
+EXPOSE 2283
+ENTRYPOINT ["tini", "--", "/bin/bash", "-c"]
+CMD ["start.sh"]

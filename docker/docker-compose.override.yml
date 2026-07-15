@@ -1,0 +1,32 @@
+# ============================================================================
+# docker-compose.override.yml -- Samsung S23 Ultra HEIC support
+#
+#   docker compose -f docker-compose.yml -f docker-compose.override.yml up -d
+#
+# Two things this does:
+#   1. Forces Sharp to use the system-wide (patched) libvips/libheif
+#   2. Stores data in local directories instead of Docker volumes
+#      ./upload       -- your photos (direct access, easy backup)
+#      ./postgres     -- database (survives container rebuilds)
+#      ./model-cache  -- ML model cache
+#
+#   Create the directories before first start:
+#     mkdir -p upload postgres model-cache
+# ============================================================================
+
+services:
+  immich-server:
+    environment:
+      SHARP_FORCE_GLOBAL_LIBVIPS: "true"
+      LD_LIBRARY_PATH: "/usr/local/lib"
+    volumes:
+      - ./upload:/usr/src/app/upload
+      - /etc/localtime:/etc/localtime:ro
+
+  database:
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+
+  immich-machine-learning:
+    volumes:
+      - ./model-cache:/cache

@@ -1,0 +1,42 @@
+diff --git a/libheif/box.cc b/libheif/box.cc
+index 76ba0f0..e32de2e 100644
+--- a/libheif/box.cc
++++ b/libheif/box.cc
+@@ -1557,10 +1557,10 @@ Error Box_iloc::parse(BitstreamRange& range, const heif_security_limits* limits)
+   }
+ 
+   // Sanity check. (This might be obsolete now as we check for range.error() below).
+-  if (limits->max_items && item_count > limits->max_items) {
++  if (item_count > 10000) {
+     std::stringstream sstr;
+     sstr << "iloc box contains " << item_count << " items, which exceeds the security limit of "
+-         << limits->max_items << " items.";
++         << "10000 items.";
+ 
+     return Error(heif_error_Memory_allocation_error,
+                  heif_suberror_Security_limit_exceeded,
+@@ -3137,10 +3137,10 @@ Error Box_ipma::parse(BitstreamRange& range, const heif_security_limits* limits)
+ 
+   uint32_t entry_cnt = range.read32();
+ 
+-  if (limits->max_items && entry_cnt > limits->max_items) {
++  if (entry_cnt > 10000) {
+     std::stringstream sstr;
+     sstr << "ipma box wants to define properties for " << entry_cnt
+-         << " items, but the security limit has been set to " << limits->max_items << " items";
++         << " items, but the security limit has been set to " << "10000 items";
+     return {heif_error_Invalid_input,
+             heif_suberror_Security_limit_exceeded,
+             sstr.str()};
+@@ -3671,9 +3671,9 @@ Error Box_iref::parse(BitstreamRange& range, const heif_security_limits* limits)
+               "Input file has an 'iref' box with no references."};
+     }
+ 
+-    if (limits->max_items && nRefs > limits->max_items) {
++    if (nRefs > 10000) {
+       std::stringstream sstr;
+-      sstr << "Number of references in iref box (" << nRefs << ") exceeds the security limits of " << limits->max_items << " references.";
++      sstr << "Number of references in iref box (" << nRefs << ") exceeds the security limits of " << "10000 references.";
+ 
+       return {heif_error_Invalid_input,
+               heif_suberror_Security_limit_exceeded,
