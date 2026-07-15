@@ -145,7 +145,9 @@ docker exec immich_server bash /tmp/diagnose-heif.sh
 docker compose -f docker-compose.yml -f docker-compose.override.yml logs -f immich-server | grep -i "security limit"
 ```
 
----
 
-Made with ❤️ for the Linux Community
-```
+
+<p align="center">
+  Made with ❤️ for the Linux Community
+</p>
+
